@@ -20,3 +20,7 @@
 .DS_Store
 .project
 .idea
+doc/
+*.swp
+*~
+bundler_stubs/
