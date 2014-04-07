@@ -68,8 +68,6 @@ describe "AuthenticationPages" do
           specify { expect(response).to redirect_to(signin_path)  }
         end
 
-
-
       describe "when attempting to visit a protected page" do
         before do 
           visit edit_user_path(user)
@@ -87,6 +85,7 @@ describe "AuthenticationPages" do
       end
     end
 
+
     describe "as a wrong user" do
       let(:user) { FactoryGirl.create(:user) }
       let(:wrong_user) { FactoryGirl.create(:user, email: 'wrong@example.com')  }
@@ -100,6 +99,18 @@ describe "AuthenticationPages" do
 
       describe "submitting a PATCH request to the User#update action" do
         before { patch user_path(wrong_user) }
+        specify { expect(response).to redirect_to(root_url) }
+      end
+    end
+
+    describe "as non-admin user" do
+      let(:user) { FactoryGirl.create(:user) }
+      let(:non_admin) { FactoryGirl.create(:user) }
+
+      before { sign_in non_admin, no_capybara: true }
+
+      describe "submitting a DELETE request to the User#destroy action" do
+        before { delete user_path(user) }
         specify { expect(response).to redirect_to(root_url) }
       end
     end
